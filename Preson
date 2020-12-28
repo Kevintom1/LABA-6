@@ -1,0 +1,199 @@
+#include <iostream>
+
+using namespace std;
+
+class Person
+
+{
+
+private:
+
+int id = 0;
+
+string name = " ";
+
+int age = 0;
+
+float height = 0;
+
+public:
+
+Person() : id(0), name("None"), age(0), height(0)
+
+{ }
+
+int EntId() const
+
+{
+
+return id;
+
+}
+
+string EntName() const
+
+{
+
+return name;
+
+}
+
+int EntAge() const
+
+{
+
+return age;
+
+}
+
+float EntHeight() const
+
+{
+
+return height;
+
+}
+
+void showInfo() const
+
+{
+
+cout << "ID: " << id << " Имя: " << name << " Возраст: " << age << " Рост: " << height << endl;
+
+}
+
+void EntId()
+
+{
+
+cout << "Введите ID: ";
+
+cin >> id;
+
+}
+
+void EntName()
+
+{
+
+cout << "Введите имя(на английском): ";
+
+cin >> name;
+
+}
+
+void EntAge()
+
+{
+
+cout << "Введите возраст: ";
+
+cin >> age;
+
+}
+
+void EntHeight()
+
+{
+
+cout << "Введите рост: ";
+
+cin >> height;
+
+}
+
+void Show_Name()
+
+{
+
+cout << "имя: " << name << endl;
+
+}
+
+};
+
+int main()
+
+{
+
+int x;
+
+char ch = ' ';
+
+setlocale(LC_ALL, "Rus");
+
+Person NumPeople[6];
+
+cout << "Заполните массив с людьми\n";
+
+for (int i = 1; i < 6; i++)
+
+{
+
+cout << "Информация о человеке " << i << endl;
+
+NumPeople[i].EntId();
+
+NumPeople[i].EntName();
+
+NumPeople[i].EntAge();
+
+NumPeople[i].EntHeight();
+
+cout << endl;
+
+}
+
+do {
+
+cout << "Для того, чтобы вывести имена всех людей нажмите 1.\nДля того чтобы редактировать отдельных человек нажмите 2.\nДля просмотра полной информации нажмите 3.\n";
+
+cin >> x;
+
+switch (x)
+
+{
+
+case 1:
+
+for (int i = 0; i < 6; i++)
+
+NumPeople[i].Show_Name();
+
+break;
+
+case 2:
+
+cout << "Для того чтобы выбрать человека, которого вы будете редактировать напишите любую цифру от 1 до 5: ";
+
+cin >> x;
+
+NumPeople[x].showInfo();
+
+cout << "Перед вами действующие данные.\n";
+
+cout << "Теперь введите новые данные.\n";
+
+cout << "Новый возраст "; NumPeople[x].EntAge();
+
+cout << "\nНовый рост "; NumPeople[x].EntHeight();
+
+break;
+
+case 3:
+
+for (int i = 0; i < 6; i++)
+
+NumPeople[i].showInfo();
+
+}
+
+cout << "Если вы хотите продолжить работу программы напишите y.\nЕсли вы хотите прекратить работу программы n. ";
+
+cin >> ch;
+
+} while (ch != 'n');
+
+return(0);
+
+}
