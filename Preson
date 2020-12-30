@@ -1,199 +1,148 @@
 #include <iostream>
-
+#include <Windows.h>
 using namespace std;
 
 class Person
-
 {
-
 private:
-
-int id = 0;
-
-string name = " ";
-
-int age = 0;
-
-float height = 0;
-
+	int id{ -1 };
+	string name{ "NONE" };
+	int age{ -1 };
+	float height{ -1 };
 public:
+	Person() : id(-1), name("NONE"), age(-1), height(-1)
+	{ }
 
-Person() : id(0), name("None"), age(0), height(0)
+	int getID() const { return id; }
+	string getName() const { return name; }
+	int getAge() const { return age; }
+	float getHeight() const { return height; }
+	void showInfo() const
+	{
+		cout << "ID: " << id << "\tИмя: " << name << "\tВозраст: " << age << "\tРост: " << height << endl;
+	}
 
-{ }
-
-int EntId() const
-
-{
-
-return id;
-
-}
-
-string EntName() const
-
-{
-
-return name;
-
-}
-
-int EntAge() const
-
-{
-
-return age;
-
-}
-
-float EntHeight() const
-
-{
-
-return height;
-
-}
-
-void showInfo() const
-
-{
-
-cout << "ID: " << id << " Имя: " << name << " Возраст: " << age << " Рост: " << height << endl;
-
-}
-
-void EntId()
-
-{
-
-cout << "Введите ID: ";
-
-cin >> id;
-
-}
-
-void EntName()
-
-{
-
-cout << "Введите имя(на английском): ";
-
-cin >> name;
-
-}
-
-void EntAge()
-
-{
-
-cout << "Введите возраст: ";
-
-cin >> age;
-
-}
-
-void EntHeight()
-
-{
-
-cout << "Введите рост: ";
-
-cin >> height;
-
-}
-
-void Show_Name()
-
-{
-
-cout << "имя: " << name << endl;
-
-}
-
+	void setID()
+	{
+		cout << "Введите ID: ";
+		cin >> id;
+	}
+	void setName()
+	{
+		cout << "Введите имя: ";
+		cin >> name;
+	}
+	void setAge()
+	{
+		cout << "Введите возраст: ";
+		cin >> age;
+	}
+	void setHeight()
+	{
+		cout << "Введите рост: ";
+		cin >> height;
+	}
+	void setInfo();
 };
 
+void Person::setInfo()
+{
+	setID();
+	setName();
+	setAge();
+	setHeight();
+}
+
+Person* findByID(Person*, const int N, const int id);
+
 int main()
-
 {
+	setlocale(LC_ALL, "Rus");
+	SetConsoleOutputCP(1251);
+	SetConsoleCP(1251);
 
-int x;
 
-char ch = ' ';
+	int people_count{ 0 };
+	cout << "Введите количество людей: ";
+	cin >> people_count;
+	if (people_count < 1)
+	{
+		cerr << "Введите кол-во больше 0\n";
+		system("pause");
+		return 1;
+	}
+	Person* people = new Person[people_count];
 
-setlocale(LC_ALL, "Rus");
+	for (int i = 0; i < people_count; i++)
+	{
+		cout << "\nВвод информации о " << i + 1 << " человеке:\n";
+		people[i].setInfo();
+	}
 
-Person NumPeople[6];
 
-cout << "Заполните массив с людьми\n";
+	int decision{ 0 };
+	bool flg = true;
+	int id{ -1 };
+	Person* prsn{ NULL };
+	do
+	{
+		cout << "\nВыберите действие:\n\n\t0 - завершить работу\n\t1 - посмотреть список имен и их ID\n\t2 - посмотреть всю информацию о человеке которого вы выберите\n\t3 - изменить конкретную информацию о человеке которого вы выберите\n"
+			<< "\nВведите цифру действия которое хотите выполнить: ";
+		cin >> decision;
 
-for (int i = 1; i < 6; i++)
+		switch (decision)
+		{
+		case 0:
+			flg = false;
+			break;
+		case 1:
+			cout << "\n\tID\tИмя\n";
+			for (int i = 0; i < people_count; i++)
+				cout << "\n\t" << people[i].getID() << '\t' << people[i].getName() << endl;
+			break;
+		case 2:
+			cout << "\nВведите ID человека: ";
+			cin >> id;
+			cout << "\n\t";
+			prsn = findByID(people, people_count, id);
+			if (prsn != NULL) prsn->showInfo();
+			else cout << "Человека с таким ID не найдено\n";
+			prsn = NULL;
+			break;
+		case 3:
+			cout << "\nВведите ID человека: ";
+			cin >> id;
+			cout << "\n\t";
+			prsn = findByID(people, people_count, id);
+			if (prsn != NULL)
+			{
+				cout << "Введите измененную информацию:\n\n";
+				prsn->setInfo();
+			}
+			else cout << "Человека с таким ID не найдено\n";
+			prsn = NULL;
+			break;
+		default:
+			cout << "\nВведите цифру из предложенных\n";
+			break;
+		}
+	} while (flg);
 
-{
-
-cout << "Информация о человеке " << i << endl;
-
-NumPeople[i].EntId();
-
-NumPeople[i].EntName();
-
-NumPeople[i].EntAge();
-
-NumPeople[i].EntHeight();
-
-cout << endl;
-
+	delete[] people;
+	people = NULL;
+	system("pause");
+	return 0;
 }
 
-do {
-
-cout << "Для того, чтобы вывести имена всех людей нажмите 1.\nДля того чтобы редактировать отдельных человек нажмите 2.\nДля просмотра полной информации нажмите 3.\n";
-
-cin >> x;
-
-switch (x)
-
+Person* findByID(Person* people, const int N, const int id)
 {
-
-case 1:
-
-for (int i = 0; i < 6; i++)
-
-NumPeople[i].Show_Name();
-
-break;
-
-case 2:
-
-cout << "Для того чтобы выбрать человека, которого вы будете редактировать напишите любую цифру от 1 до 5: ";
-
-cin >> x;
-
-NumPeople[x].showInfo();
-
-cout << "Перед вами действующие данные.\n";
-
-cout << "Теперь введите новые данные.\n";
-
-cout << "Новый возраст "; NumPeople[x].EntAge();
-
-cout << "\nНовый рост "; NumPeople[x].EntHeight();
-
-break;
-
-case 3:
-
-for (int i = 0; i < 6; i++)
-
-NumPeople[i].showInfo();
-
-}
-
-cout << "Если вы хотите продолжить работу программы напишите y.\nЕсли вы хотите прекратить работу программы n. ";
-
-cin >> ch;
-
-} while (ch != 'n');
-
-return(0);
-
+	for (int i = 0; i < N; i++)
+	{
+		if (id == people[i].getID())
+		{
+			return &people[i];
+			break;
+		}
+	}
+	return NULL;
 }
